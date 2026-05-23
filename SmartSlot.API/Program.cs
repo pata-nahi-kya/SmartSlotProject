@@ -74,6 +74,9 @@ builder.Services.AddCors(options =>
 // --- 4. DEPENDENCY INJECTION ---
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBusinessService,BusinessService>();
+builder.Services.AddScoped<IOfferService,OfferService>();
+builder.Services.AddScoped<IBookingService,BookingService>();
+builder.Services.AddScoped<ISlotService,SlotService>();
 builder.Services.AddScoped<JwtHelper>();
 
 // --- 5. JWT AUTHENTICATION CONFIGURATION ---
