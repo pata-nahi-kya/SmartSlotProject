@@ -469,9 +469,61 @@ PHASE 2 starting at 2:17
 ✔ Protect APIs
 ✔ Understand authentication architecture
 
+creating required dtos
+created basic auth where i take name email and password as body in post and then i can verify and give jwt 
 
+-------------------------
 
+PHASE 3 starting at 2.51
 
+✔ Create Business APIs
+✔ Create Offer APIs
+✔ Protected admin routes
+✔ Database relationships
+✔ CRUD operations
+✔ DTO mapping
+✔ Validation logic
+
+api i build 
+POST   /api/business
+GET    /api/business
+GET    /api/business/{id}
+PUT    /api/business/{id}
+DELETE /api/business/{id}
+
+offer api
+
+POST   /api/offers
+GET    /api/offers
+GET    /api/offers/{id}
+PUT    /api/offers/{id}
+DELETE /api/offers/{id}
+
+public api
+
+GET /api/offers/public
+
+-----------------
+phase 4 
+
+✔ Create offers
+✔ Create time slots
+✔ Public offer listing
+✔ Offer details page API
+✔ Slot availability system
+✔ Booking-ready architecture
+
+some api
+POST   /api/offers
+GET    /api/offers
+GET    /api/offers/{id}
+PUT    /api/offers/{id}
+DELETE /api/offers/{id}
+
+POST /api/slots
+GET  /api/slots/offer/{offerId}
+GET /api/public/offers
+GET /api/public/offers/{id}
 
 
 

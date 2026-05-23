@@ -1,4 +1,6 @@
+using SmartSlot.API.Enums;
 namespace SmartSlot.API.Entities;
+
 
 public class User
 {
@@ -10,7 +12,7 @@ public class User
 
     public string PasswordHash { get; set; } = string.Empty;
 
-    public string Role { get; set; } = "Admin";
+    public UserRole Role { get; set; } = UserRole.Admin;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
