@@ -7,6 +7,7 @@ using SmartSlot.API.Helpers;
 using SmartSlot.API.Interfaces;
 using SmartSlot.API.Services;
 using System.Text;
+using SmartSlot.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,7 @@ builder.Services.AddScoped<IBusinessService,BusinessService>();
 builder.Services.AddScoped<IOfferService,OfferService>();
 builder.Services.AddScoped<IBookingService,BookingService>();
 builder.Services.AddScoped<ISlotService,SlotService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>(); 
 builder.Services.AddScoped<JwtHelper>();
 
 // --- 5. JWT AUTHENTICATION CONFIGURATION ---
@@ -101,7 +103,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionMiddleware>(); 
 // --- 6. MIDDLEWARE PIPELINE ---
 app.UseSwagger();
 app.UseSwaggerUI(options =>

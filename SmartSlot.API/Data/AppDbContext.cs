@@ -21,13 +21,22 @@ public class AppDbContext : DbContext
     public DbSet<Booking> Bookings => Set<Booking>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+{
+    base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Booking>()
-            .HasOne(b => b.Slot)
-            .WithMany(s => s.Bookings)
-            .HasForeignKey(b => b.SlotId)
-            .OnDelete(DeleteBehavior.NoAction);
-    }
+    modelBuilder.Entity<Booking>()
+        .HasOne(b => b.Slot)
+        .WithMany(s => s.Bookings)
+        .HasForeignKey(b => b.SlotId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+    modelBuilder.Entity<Offer>()
+        .Property(o => o.OfferPrice)
+        .HasPrecision(18, 2);
+
+    modelBuilder.Entity<Offer>()
+        .Property(o => o.OriginalPrice)
+        .HasPrecision(18, 2);
+}
+
 }

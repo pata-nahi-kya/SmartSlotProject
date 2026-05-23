@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SmartSlot.API.Data;
+using SmartSlot.API.DTOs.Common;
 using SmartSlot.API.DTOs.Offer;
 using SmartSlot.API.Entities;
 using SmartSlot.API.Interfaces;
-using SmartSlot.API.Enums;
 
 namespace SmartSlot.API.Services;
 
@@ -16,7 +16,7 @@ public class OfferService : IOfferService
         _context = context;
     }
 
-    public async Task<OfferResponseDto> CreateOfferAsync(CreateOfferDto dto)
+    public async Task<SmartSlot.API.DTOs.Offer.OfferResponseDto> CreateOfferAsync(SmartSlot.API.DTOs.Offer.CreateOfferDto dto)
     {
         var businessExists = await _context.Businesses
             .AnyAsync(x => x.Id == dto.BusinessId);
@@ -26,7 +26,7 @@ public class OfferService : IOfferService
             throw new Exception("Business not found");
         }
 
-        // Calculate a fallback discount percentage if prices allow it
+        // Calculate a safe fallback discount percentage inline
         double discount = dto.OriginalPrice > 0 
             ? (double)((dto.OriginalPrice - dto.OfferPrice) / dto.OriginalPrice * 100) 
             : 0;
@@ -44,13 +44,13 @@ public class OfferService : IOfferService
             StartDate = dto.StartDate,
             EndDate = dto.EndDate,
             TermsAndConditions = dto.TermsAndConditions ?? "Standard terms apply.",
-            Status = OfferStatus.Active // Default enum state from your system
+            Status = Enums.OfferStatus.Active
         };
 
         _context.Offers.Add(offer);
         await _context.SaveChangesAsync();
 
-        return new OfferResponseDto
+        return new SmartSlot.API.DTOs.Offer.OfferResponseDto
         {
             Id = offer.Id,
             BusinessId = offer.BusinessId,
@@ -67,10 +67,10 @@ public class OfferService : IOfferService
         };
     }
 
-    public async Task<List<OfferResponseDto>> GetAllOffersAsync()
+    public async Task<List<SmartSlot.API.DTOs.Offer.OfferResponseDto>> GetAllOffersAsync()
     {
         return await _context.Offers
-            .Select(o => new OfferResponseDto
+            .Select(o => new SmartSlot.API.DTOs.Offer.OfferResponseDto
             {
                 Id = o.Id,
                 BusinessId = o.BusinessId,
@@ -88,11 +88,11 @@ public class OfferService : IOfferService
             .ToListAsync();
     }
 
-    public async Task<OfferResponseDto?> GetOfferByIdAsync(Guid id)
+    public async Task<SmartSlot.API.DTOs.Offer.OfferResponseDto?> GetOfferByIdAsync(Guid id)
     {
         return await _context.Offers
             .Where(o => o.Id == id)
-            .Select(o => new OfferResponseDto
+            .Select(o => new SmartSlot.API.DTOs.Offer.OfferResponseDto
             {
                 Id = o.Id,
                 BusinessId = o.BusinessId,
@@ -108,5 +108,80 @@ public class OfferService : IOfferService
                 Status = o.Status.ToString()
             })
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<PaginatedResponseDto<SmartSlot.API.DTOs.Offer.OfferResponseDto>> SearchOffersAsync(OfferSearchDto dto)
+    {
+        var query = _context.Offers
+            .Include(o => o.Business)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(dto.Search))
+        {
+            query = query.Where(o => o.Title.Contains(dto.Search) || o.Description.Contains(dto.Search));
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.City))
+        {
+            query = query.Where(o => o.Business.City == dto.City);
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.BusinessType))
+        {
+            query = query.Where(o => o.Business.BusinessType == dto.BusinessType);
+        }
+
+        if (dto.MinPrice.HasValue)
+        {
+            query = query.Where(o => o.OfferPrice >= dto.MinPrice.Value);
+        }
+
+        if (dto.MaxPrice.HasValue)
+        {
+            query = query.Where(o => o.OfferPrice <= dto.MaxPrice.Value);
+        }
+
+        query = dto.SortBy?.ToLower() switch
+        {
+            "price" => query.OrderBy(o => o.OfferPrice),
+            "price_desc" => query.OrderByDescending(o => o.OfferPrice),
+            "title" => query.OrderBy(o => o.Title),
+            _ => query.OrderByDescending(o => o.StartDate)
+        };
+
+        var totalRecords = await query.CountAsync();
+        var pageNumber = dto.Page < 1 ? 1 : dto.Page;
+        var pageSize = dto.PageSize < 1 ? 10 : dto.PageSize;
+
+        var offers = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(o => new SmartSlot.API.DTOs.Offer.OfferResponseDto
+            {
+                Id = o.Id,
+                BusinessId = o.BusinessId,
+                Title = o.Title,
+                Description = o.Description,
+                Category = o.Category,
+                OriginalPrice = o.OriginalPrice,
+                OfferPrice = o.OfferPrice,
+                DiscountPercentage = o.DiscountPercentage,
+                StartDate = o.StartDate,
+                EndDate = o.EndDate,
+                TermsAndConditions = o.TermsAndConditions,
+                Status = o.Status.ToString()
+            })
+            .ToListAsync();
+
+        var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+        return new PaginatedResponseDto<SmartSlot.API.DTOs.Offer.OfferResponseDto>
+        {
+            Data = offers,
+            TotalRecords = totalRecords,
+            CurrentPage = pageNumber,
+            PageSize = pageSize,
+            TotalPages = totalPages
+        };
     }
 }

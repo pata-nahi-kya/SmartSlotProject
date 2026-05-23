@@ -1,0 +1,13 @@
+namespace SmartSlot.API.DTOs.Offer;
+
+public class OfferSearchDto
+{
+    public string? Search { get; set; }
+    public string? City { get; set; }
+    public string? BusinessType { get; set; }
+    public decimal? MinPrice { get; set; }
+    public decimal? MaxPrice { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+    public string? SortBy { get; set; } // price, price_desc, title
+}

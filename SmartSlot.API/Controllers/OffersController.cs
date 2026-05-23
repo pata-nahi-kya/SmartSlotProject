@@ -11,53 +11,44 @@ public class OfferController : ControllerBase
 {
     private readonly IOfferService _offerService;
 
-    public OfferController(
-        IOfferService offerService
-    )
+    public OfferController(IOfferService offerService)
     {
         _offerService = offerService;
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> CreateOffer(
-        CreateOfferDto dto
-    )
+    public async Task<IActionResult> CreateOffer(CreateOfferDto dto)
     {
-        var offer =
-            await _offerService
-                .CreateOfferAsync(dto);
-
+        var offer = await _offerService.CreateOfferAsync(dto);
         return Ok(offer);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllOffers()
     {
-        var offers =
-            await _offerService
-                .GetAllOffersAsync();
-
+        var offers = await _offerService.GetAllOffersAsync();
         return Ok(offers);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetOfferById(
-        Guid id
-    )
+    public async Task<IActionResult> GetOfferById(Guid id)
     {
-        var offer =
-            await _offerService
-                .GetOfferByIdAsync(id);
+        var offer = await _offerService.GetOfferByIdAsync(id);
 
         if (offer == null)
         {
-            return NotFound(new
-            {
-                message = "Offer not found"
-            });
+            return NotFound(new { message = "Offer not found" });
         }
 
         return Ok(offer);
+    }
+
+    // 🚀 ADD ONLY THIS NEW METHOD AT THE BOTTOM:
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchOffers([FromQuery] OfferSearchDto dto)
+    {
+        var result = await _offerService.SearchOffersAsync(dto);
+        return Ok(result);
     }
 }
