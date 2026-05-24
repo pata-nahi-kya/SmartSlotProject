@@ -124,7 +124,7 @@ export default function OfferDetail() {
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-white/20 shadow-2xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left Column - Offer Details */}
-            <div className="p-8 lg:p-10 bg-gradient-to-br from-gray-50 to-white border-r border-gray-100">
+            <div className="p-8 lg:p-10 bg-linear-to-br from-gray-50 to-white border-r border-gray-100">
               {/* Category Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full mb-6">
                 <Sparkles className="h-3.5 w-3.5 text-blue-600" />
