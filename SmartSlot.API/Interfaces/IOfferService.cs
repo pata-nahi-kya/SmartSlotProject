@@ -9,4 +9,5 @@ public interface IOfferService
     Task<List<SmartSlot.API.DTOs.Offer.OfferResponseDto>> GetAllOffersAsync();
     Task<SmartSlot.API.DTOs.Offer.OfferResponseDto?> GetOfferByIdAsync(Guid id);
     Task<PaginatedResponseDto<SmartSlot.API.DTOs.Offer.OfferResponseDto>> SearchOffersAsync(OfferSearchDto dto);
+    Task<bool> DeleteOfferAsync(Guid id);
 }

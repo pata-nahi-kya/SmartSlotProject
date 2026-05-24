@@ -16,7 +16,7 @@ public class OfferController : ControllerBase
         _offerService = offerService;
     }
 
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> CreateOffer(CreateOfferDto dto)
     {
@@ -50,5 +50,18 @@ public class OfferController : ControllerBase
     {
         var result = await _offerService.SearchOffersAsync(dto);
         return Ok(result);
+    }
+
+    [Authorize(Policy = "AdminOnly")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOffer(Guid id)
+    {
+        var deleted = await _offerService.DeleteOfferAsync(id);
+        if (!deleted)
+        {
+            return NotFound(new { message = "Offer not found" });
+        }
+
+        return Ok(new { message = "Offer deleted successfully" });
     }
 }

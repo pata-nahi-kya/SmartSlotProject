@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartSlot.API.Data;
 using SmartSlot.API.DTOs.Slot;
 using SmartSlot.API.Enums;
+using SmartSlot.API.Entities;
 using SmartSlot.API.Interfaces;
 
 namespace SmartSlot.API.Services;
@@ -42,4 +43,27 @@ public class SlotService : ISlotService
             };
         }).ToList();
     }
+
+    public async Task<Slot> CreateSlotAsync(CreateSlotDto dto)
+{
+    var slot = new Slot
+    {
+        Id = Guid.NewGuid(),
+        OfferId = dto.OfferId,
+        
+        // Extract the Date part for SlotDate
+        SlotDate = dto.StartTime.Date,
+        
+        // Extract the TimeOfDay part (TimeSpan) for StartTime and EndTime
+        StartTime = dto.StartTime.TimeOfDay,
+        EndTime = dto.EndTime.TimeOfDay,
+        
+        Capacity = dto.Capacity
+    };
+
+    _context.Slots.Add(slot);
+    await _context.SaveChangesAsync();
+
+    return slot; 
+}
 }

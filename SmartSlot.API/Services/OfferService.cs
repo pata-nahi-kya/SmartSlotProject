@@ -184,4 +184,32 @@ public class OfferService : IOfferService
             TotalPages = totalPages
         };
     }
+
+    public async Task<bool> DeleteOfferAsync(Guid id)
+    {
+        var offer = await _context.Offers
+            .Include(o => o.Slots)
+            .ThenInclude(s => s.Bookings)
+            .FirstOrDefaultAsync(o => o.Id == id);
+
+        if (offer == null)
+        {
+            return false;
+        }
+
+        var bookings = offer.Slots.SelectMany(s => s.Bookings).ToList();
+        if (bookings.Count > 0)
+        {
+            _context.Bookings.RemoveRange(bookings);
+        }
+
+        if (offer.Slots.Count > 0)
+        {
+            _context.Slots.RemoveRange(offer.Slots);
+        }
+
+        _context.Offers.Remove(offer);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

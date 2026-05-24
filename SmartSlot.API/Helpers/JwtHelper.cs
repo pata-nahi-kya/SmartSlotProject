@@ -35,11 +35,15 @@ public class JwtHelper
             SecurityAlgorithms.HmacSha256
         );
 
+        var expireDays = _configuration.GetValue("Jwt:ExpireDays", 1);
+        if (expireDays < 1) expireDays = 1;
+        if (expireDays > 30) expireDays = 30;
+
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(7),
+            expires: DateTime.UtcNow.AddDays(expireDays),
             signingCredentials: credentials
         );
 

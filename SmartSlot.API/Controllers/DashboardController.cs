@@ -6,7 +6,7 @@ namespace SmartSlot.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize] // Enforces secure JWT token authorization restrictions for administrators
+[Authorize(Policy = "AdminOnly")]
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;

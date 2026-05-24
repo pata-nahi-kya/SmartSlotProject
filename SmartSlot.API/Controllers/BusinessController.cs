@@ -18,10 +18,10 @@ public class BusinessController : ControllerBase
         _businessService = businessService;
     }
 
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> CreateBusiness(
-        CreateBusinessDto dto
+        [FromBody] CreateBusinessDto dto
     )
     {
         var business =

@@ -9,4 +9,12 @@ public interface IBookingService
     );
 
     Task<List<BookingResponseDto>> GetAllBookingsAsync();
+
+    Task<BookingResponseDto?> UpdateBookingStatusAsync(Guid id, UpdateBookingStatusDto dto);
+
+    Task<List<CustomerBookingDto>> GetBookingsByCustomerEmailAsync(string email);
+
+    Task<CustomerBookingDto?> CancelBookingForCustomerAsync(Guid id, string email);
+
+    Task<PublicBookingTrackerDto?> GetBookingByReferenceAsync(string reference);
 }
