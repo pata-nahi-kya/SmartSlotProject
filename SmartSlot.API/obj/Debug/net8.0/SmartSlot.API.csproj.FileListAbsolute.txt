@@ -145,3 +145,5 @@ E:\SmartSlotProject\SmartSlot.API\obj\Debug\net8.0\refint\SmartSlot.API.dll
 E:\SmartSlotProject\SmartSlot.API\obj\Debug\net8.0\SmartSlot.API.pdb
 E:\SmartSlotProject\SmartSlot.API\obj\Debug\net8.0\SmartSlot.API.genruntimeconfig.cache
 E:\SmartSlotProject\SmartSlot.API\obj\Debug\net8.0\ref\SmartSlot.API.dll
+E:\SmartSlotProject\SmartSlot.API\bin\Debug\net8.0\DotNetEnv.dll
+E:\SmartSlotProject\SmartSlot.API\bin\Debug\net8.0\Superpower.dll

@@ -1,4 +1,5 @@
 using System.Text;
+using DotNetEnv;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
@@ -12,6 +13,7 @@ using SmartSlot.API.Interfaces;
 using SmartSlot.API.Middleware;
 using SmartSlot.API.Services;
 
+Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Configuration & secrets validation ---
@@ -57,6 +59,7 @@ if (builder.Environment.IsDevelopment())
         });
     });
 }
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
