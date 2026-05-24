@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartSlot.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcd24290e3b1c721abea4100806cc101997295cd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f195d500c78a18eb00fa56cb7726231705acc56")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartSlot.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartSlot.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
